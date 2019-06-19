@@ -1,0 +1,57 @@
+<html lang="en">
+
+    <head>
+
+        <% include ./partials/header_details %>
+
+    </head>
+
+    <body background="/public/assets/img/class_selection_bg.jpg">
+
+        <div class = "container">
+
+            <div class = "row">
+
+                <div class = "col-md-12 classchoicebox">
+                    <div class = "classchoiceimage">
+                        <img src = "./public/assets/img/warrior.png" id = "classimg" alt = "" height = "250" width = "250">
+                        <p class = "classselectiontext"><b>
+                            Your randomly rolled stats: Strength <%- locals.user.strength %> , Intellect <%- locals.user.intellect %> , Agility <%- locals.user.agility %>
+                        </b></p>
+                    </div>
+
+                    <div class = "classchoicemenu">
+                        <h2 class = "classselectiontext"><b>Select your class below</b></h2>
+                        <div class = "classchoice">
+                            <button class = "classchoicebutton">Warrior</button>
+                        </div>
+
+                        <div class = "classchoice">
+                            <button class = "classchoicebutton">Shooter</button>
+                        </div>
+
+                        <div class = "classchoice">
+                            <button class = "classchoicebutton">Mage</button>
+                        </div>
+
+                        <div class = "classchoice">
+                            <button class = "classchoicebutton">Warlock</button>
+                        </div>
+
+                    </div>
+
+                    <form method = "POST" action = "main_page">
+                        <input type = "hidden" name = "selected_class" value = "" id = "selected_class">
+                        <button type = "submit" class = "next">Done</button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <script src = "/public/assets/js/scripts/ClassMenuHighlight.js"></script>
+        <script src = "/public/assets/js/scripts/ClassImageChanger.js"></script>
+    </body>
+
+</html>

@@ -1,0 +1,70 @@
+<html lang="en">
+
+    <head>
+
+        <% include ./partials/header_details %>
+
+    </head>
+
+    <body background="/public/img/main_bg.jpg">
+
+        <% include ./partials/navbar.ejs %>
+
+        <div class = "container">
+
+            <div class = "row">
+
+                <div class = "col-md-12">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <% if (top20) { %>
+                                    <% for (var i = 0; i < top20.length ; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%-  top20[i].username; %>
+                                        </td>
+
+                                        <td>
+                                            <%-  top20[i].wins; %>
+                                        </td>
+
+                                        <td>
+                                            <%-  top20[i].losses; %>
+                                        </td>
+
+                                        <td>
+                                            <%-  top20[i].rating; %>
+                                        </td>
+                                    </tr>
+
+                                    <% } %>
+                                <% } %> 
+
+                            </tbody>
+
+                        </table>
+                      </div>
+
+                </div>
+
+            </div>
+        
+
+        </div>
+
+    </body>
+
+</html>

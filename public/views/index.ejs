@@ -1,0 +1,81 @@
+<html lang="en">
+
+    <head>
+
+        <% include ./partials/header_details %>
+
+    </head>
+
+    <body background="/public/assets/img/bg.jpg">
+        <div class = "container">
+            
+            <div class = "row">
+                
+                <!-- Login part -->
+                <div class = "col-md-6 userbox">
+
+                    <div class = "loginbox">
+                        <h1>Login</h1>
+                        <form action = "/login" method = "POST" id = "login" enctype = "application/x-www-form-urlencoded">
+                        <div class="form-group">
+                            <label for="usr">Username:</label>
+                            <input type="text" class="form-control" id="usrLog" name = "usrLog">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" class="form-control" id="pwdLog" name = "pwdLog">
+                        </div>
+                        </form>
+                        <button type="submit" form = "login" class="btn btn-dark customBtn">Login</button>
+                        <% if(locals.messages.loginError && messages.loginError) { %>
+                            <br><br>
+                            <p class = "alert alert-danger"><%- messages.loginError %></p>
+                        <%}%>
+                    </div>
+
+                </div>
+
+                <!-- Registration part -->
+                <div class = "col-md-6 userbox">
+                    
+                    <div class = "regbox">
+
+                        <h1>Register</h1>
+                        <form action = "/register" method = "POST" id = "reg" enctype = "application/x-www-form-urlencoded">
+                        <div class="form-group">
+                            <label for="usr">E-mail:</label>
+                            <input type="text" name = "emailReg" class="form-control" id="emailReg">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="usr">Username:</label>
+                            <input type="text" name = "usrReg" class="form-control" id="usrReg">
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" name = "pwdReg" class="form-control" id="pwdReg">
+                        </div>
+                        </form>
+                        <button type="submit" form = "reg" class="btn btn-dark customBtn" id="regBtn">Register</button>
+                        <% if(locals.messages.regSuccess && messages.regSuccess) { %>
+                            <br><br>
+                            <p class = "alert alert-success"><%- messages.regSuccess %></p>
+                        <%} else if (locals.messages.regError && messages.regError) {%>
+                            <br><br>
+                            <p class = "alert alert-danger"><%- messages.regError %></p>
+                        <% } %>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+        <script src = "/public/assets/js/scripts/CredentialCheck.js"></script>
+
+    </body>
+
+</html>

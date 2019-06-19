@@ -1,0 +1,260 @@
+<html lang="en">
+
+<head>
+
+    <% include ./partials/header_details %>
+        <script src="/public/assets/js/classes/Player.js"></script>
+        <script src="/public/assets/js/classes/Enemy.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            var players_arr = [];
+            var player1turn = true;
+            var player2turn = false;
+            var hero;
+            socket.on("connect", function () {
+                var hero_cl = '<%- player.class%>';
+
+                switch (hero_cl) {
+                    case "Warlock":
+                        hero = ClassFactory.createWarlock('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        console.log(hero.strength);
+                        break;
+                    case "Shooter":
+                        hero = ClassFactory.createShooter('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        console.log(hero.strength);
+                        break;
+                    case "Warrior":
+                        hero = ClassFactory.createWarrior('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    case "Mage":
+                        hero = ClassFactory.createMage('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    default:
+                        alert("Something went wrong");
+                        break;
+                }
+
+                var player = new Player('<%- player.username%>', (parseInt('<%- player.level%>') + 12) * 10, '<%- player.level%>' * 10, hero
+                    , socket.io.engine.id, '<%- player.id %>');
+                console.log(player.hero_class.strength);
+                socket.emit("user_info", player);
+                console.log(socket.io.engine.id);
+
+
+                socket.on("battle_users", function (players) {
+                    players_arr = players;
+                    var remaining = players[0].hp;
+                    var remaining2 = players[1].hp;
+
+                    if (socket.io.engine.id == players[0].socketID) {
+                        document.getElementById("player2Button1").disabled = true;
+                        document.getElementById("player2Button2").disabled = true;
+                        document.getElementById("player2Button3").disabled = true;
+                    } else if (socket.io.engine.id == players[1].socketID) {
+                        document.getElementById("player1Button1").disabled = true;
+                        document.getElementById("player1Button2").disabled = true;
+                        document.getElementById("player1Button3").disabled = true;
+                    }
+
+                    //create pictures
+                    var pl1img = document.createElement("img");
+                    var pl1classname = players[0].classPic;
+                    pl1img.setAttribute("src", "./public/assets/img/" + pl1classname);
+                    pl1img.setAttribute("width", 250);
+                    pl1img.setAttribute("height", 300);
+                    document.getElementsByClassName("playerImgBox")[0].appendChild(pl1img);
+                    document.getElementById("player1Button1").textContent = players[0].hero_class.spell1.name;
+                    document.getElementById("player1Button2").textContent = players[0].hero_class.spell2.name;
+                    document.getElementById("player1Button3").textContent = players[0].hero_class.spell3.name;
+
+                    var pl2img = document.createElement("img");
+                    var pl2classname = players[1].classPic;
+
+                    pl2img.setAttribute("src", "./public/assets/img/" + pl2classname);
+                    pl2img.setAttribute("width", 250);
+                    pl2img.setAttribute("height", 300);
+                    document.getElementsByClassName("playerImgBox")[1].appendChild(pl2img);
+                    document.getElementById("player2Button1").textContent = players[1].hero_class.spell1.name;
+                    document.getElementById("player2Button2").textContent = players[1].hero_class.spell2.name;
+                    document.getElementById("player2Button3").textContent = players[1].hero_class.spell3.name;
+
+                    document.getElementById("player2Button1").disabled = true;
+                    document.getElementById("player2Button2").disabled = true;
+                    document.getElementById("player2Button3").disabled = true;
+
+                    //attach health to healthbars
+                    var hpText1 = document.createElement("p");
+                    hpText1.textContent = players[0].hp;
+                    hpText1.classList.add("hpText");
+                    document.getElementsByClassName("player1HpBar")[0].appendChild(hpText1);
+
+                    var hpText2 = document.createElement("p");
+                    hpText2.textContent = players[1].hp;
+                    hpText2.classList.add("hpText");
+                    document.getElementsByClassName("player2HpBar")[0].appendChild(hpText2);
+
+                    //add 2 remaining ability buttons
+                    //TODO: finish this part
+                    //TODO: FIX PLAYER TURNS XD
+
+                });
+
+                $("#player2Button1").prop("disabled", true);
+
+                socket.on("turn_1", function (remaining) {
+                    player1turn = true;
+                    player2turn = false;
+                    $(".player1HpBar").css("width", remaining + '%');
+                    $("#player1Button1").prop("disabled", false);
+                });
+
+                socket.on("turn_2", function (remaining) {
+                    player2turn = true;
+                    player1turn = false;
+                    $(".player2HpBar").css("width", remaining + '%');
+                    $("#player2Button1").prop("disabled", false);
+                    document.getElementById("player2Button1").disabled = false;
+                    document.getElementById("player2Button2").disabled = false;
+                    document.getElementById("player2Button3").disabled = false;
+                });
+
+                socket.on("won", function () {
+                    $("#winModal").modal("show");
+                });
+
+                socket.on("lost", function () {
+                    $("#loseModal").modal("show");
+                });
+
+            });
+        </script>
+
+</head>
+
+<body background="/public/assets/img/arena.png">
+
+    <% include ./partials/navbar.ejs %>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="fightBox">
+
+                        <div class="playerImgBox">
+
+                        </div>
+
+                        <div class="playerStatsBox">
+
+                            <!-- HP Bar -->
+                            <p>
+                                <b>HP:</b>
+                            </p>
+
+                            <div class="progress">
+                                <div class="progress-bar bg-success player1HpBar" style="width:100%"></div>
+                            </div>
+
+                            <!-- Maybe add Mana bar later -->
+
+                        </div>
+
+                        <div class="playerSpellsBox">
+
+                            <button type="button" id="player1Button1"></button>
+
+                            <button type="button" id="player1Button2"></button>
+
+                            <button type="button" id="player1Button3"></button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="fightBox">
+
+                        <div class="playerImgBox">
+
+                        </div>
+
+                        <div class="playerStatsBox">
+
+                            <!-- HP Bar -->
+                            <p>
+                                <b>HP:</b>
+                            </p>
+
+                            <div class="progress">
+                                <div class="progress-bar bg-success player2HpBar" style="width:100%"></div>
+                            </div>
+
+                            <!-- Maybe add Mana bar later -->
+
+                        </div>
+
+                        <div class="playerSpellsBox">
+
+                            <button type="button" id="player2Button1"></button>
+
+                            <button type="button" id="player2Button2"></button>
+
+                            <button type="button" id="player2Button3"></button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="winModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content winModalInside">
+                            <div class="modal-header">
+                                <h1 class="modal-title">You win!</h1>
+                            </div>
+                            <div class="modal-body">
+                                <p>You have won the battle!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="loseModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content loseModalInside">
+                            <div class="modal-header">
+                                <h1 class="modal-title">You lost!</h1>
+                            </div>
+                            <div class="modal-body">
+                                <p>You have lost the battle!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <script src="/public//assets/js/scripts/PvPBattles.js"></script>
+
+</body>
+
+</html>

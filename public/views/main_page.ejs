@@ -1,0 +1,53 @@
+<html lang="en">
+
+    <head>
+
+        <% include ./partials/header_details %>
+
+    </head>
+
+    <body background="/public/assets/img/main_bg.jpg">
+
+        <% include ./partials/navbar.ejs %>
+
+        <div class = "container">
+
+            <div class = "col-md-12 mainPageWelcome">
+
+                <h1>Welcome to DHTMLRPG <%- locals.user.username %></h1>
+   
+                <div style = "margin-top:6%">
+                    <p>
+                        DHTMLRPG is a browser and turn-based RPG game made as a final assignment for the DHTML course provided by Stenden University.<br>
+                        <br>The main goal of this game was to improve the students skills in DHTML, namely javascript.<br>
+                        <br>The back-end of this game was created using node.js and express framework.<br>
+                        <br>Most effects are accomplished with the use of traditional javascript and jQuery.<br>
+                        <br>The navigation bar can be used to navigate through different parts of the game.<br>
+                        <br>Two different game modes are currently available: <br>
+                        <br> 
+                        <ul class = "list-group">
+                            <li class = "list-group-item list-group-item-dark pvp-list-item clickable">
+                                PVP
+                            </li>
+                            <p class = "PvPText">PVP mode enables a user to play against another user. The best players will be listed in a Hall of Fame page.<br>
+                                Player's PVP score will be judged by rating, which will be determined by substracting loses from wins.<br>
+                                For example, if someone has 30 wins and 20 losses, he will have a rating of 10.</p>
+                            <li class = "list-group-item list-group-item-dark dungeon-list-item clickable">
+                                Dungeon
+                            </li>
+                            <p class = "DungeonText">Dungeon mode is a good way of leveling up to win PVP more easily. You will play against programmed<br>
+                                 bots that you will need to defeat
+                            </p>
+                        </ul>
+
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+        <script src = "/public/assets/js/scripts/WelcomePageListEffects.js"></script>
+
+    </body>
+
+</html>

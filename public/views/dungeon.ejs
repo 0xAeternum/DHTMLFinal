@@ -1,0 +1,154 @@
+<html lang="en">
+
+<head>
+
+    <% include ./partials/header_details %>
+        <script src="/public/assets/js/classes/LevelFactory.js"></script>
+        <script src="/public/assets/js/scripts/PVEEnemyLoader.js"></script>
+        <script src="/public/assets/js/classes/Enemy.js"></script>
+        <script src="/public/assets/js/scripts/PvEBattles.js"></script>
+        <script src="public/assets/js/classes/Player.js"></script>
+        <script src="/public/assets/js/scripts/CheckboxChanger.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body background="/public/assets/img/main_bg.jpg">
+
+    <% include ./partials/navbar.ejs %>
+
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div id="playerBox">
+
+                        <div class="playerImgBox">
+                            <img width="250px" height="300px" id="playerImg">
+                        </div>
+
+                        <div class="playerStatsBox">
+
+                            <!-- HP Bar -->
+                            <p>
+                                <b>HP:</b>
+                            </p>
+
+                            <div class="progress">
+                                <div class="progress-bar bg-success player1HpBar" style="width:100%"></div>
+                            </div>
+
+                            <!-- Maybe add Mana bar later -->
+
+                        </div>
+
+                        <div class="playerSpellsBox">
+
+                            <button type="button" id="playerButton1"></button>
+
+                            <button type="button" id="playerButton2"></button>
+
+                            <button type="button" id="playerButton3"></button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="enemyPvEBox">
+
+                        <div class="enemyPvEImgBox">
+                            <img class="enemyPvEImg" width="250px" height="300px">
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-bar bg-success enemy1HpBar" style="width:100%"></div>
+                        </div>
+
+                        <input type="checkbox" id="enemycb0" value="empty">
+
+                    </div>
+
+                    <div class="enemyPvEBox">
+
+                        <div class="enemyPvEImgBox">
+                            <img class="enemyPvEImg" width="250px" height="300px">
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-bar bg-success enemy2HpBar" style="width:100%"></div>
+                        </div>
+
+                        <input type="checkbox" id="enemycb1" value="empty">
+
+                    </div>
+
+                    <div class="enemyPvEBox">
+
+                        <div class="enemyPvEImgBox">
+                            <img class="enemyPvEImg" width="250px" height="300px">
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-bar bg-success enemy3HpBar" style="width:100%"></div>
+                        </div>
+
+                        <input type="checkbox" id="enemycb2" value="empty">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <script>
+            
+
+                var hero_cl = '<%- player.class %>';
+                console.log(hero_cl);
+                var hero;
+                switch (hero_cl) {
+                    case "Warlock":
+                        hero = ClassFactory.createWarlock('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    case "Shooter":
+                        hero = ClassFactory.createShooter('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    case "Warrior":
+                        hero = ClassFactory.createWarrior('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    case "Mage":
+                        hero = ClassFactory.createMage('<%- player.strength%>', '<%- player.intellect%>', '<%- player.agility%>');
+                        break;
+                    default:
+                        alert("Something went wrong");
+                        break;
+                }
+
+                var player = new Player('<%- player.username%>', (parseInt('<%- player.level%>') + 12) * 10, '<%- player.level%>' * 10, hero
+                    , null, '<%- player.id %>');
+
+                document.getElementById("playerButton1").textContent = hero.spell1.name;
+                document.getElementById("playerButton2").textContent = hero.spell2.name;
+                document.getElementById("playerButton3").textContent = hero.spell3.name;
+
+                document.getElementById("playerImg").src = "/public/assets/img/" + hero_cl + ".png";
+
+                //attach health to healthbars
+                var hpText1 = document.createElement("p");
+                hpText1.textContent = player.hp;
+                hpText1.classList.add("hpText");
+                document.getElementsByClassName("player1HpBar")[0].appendChild(hpText1);
+                
+
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<html lang="en">
+
+    <head>
+
+        <% include ./partials/header_details %>
+
+    </head>
+
+    <body background="/public/img/main_bg.jpg">
+
+        <% include ./partials/navbar.ejs %>
+
+        <div class = "container">
+
+            <div class = "col-md-12 mainPageWelcome">
+
+                <div>
+                    <script>
+                        var classImg = document.createElement("img");
+                        var classname = '<%- hero_class %>' + ".png";
+                        classImg.setAttribute("src" , "./public/img/" + classname);
+                        classImg.setAttribute("width" , 250);
+                        classImg.setAttribute("height" , 300);
+                        document.getElementsByClassName("col-md-12")[0].appendChild(classImg);
+                       
+                    </script>
+                    <h1><%- username%></h1>
+                    <p>
+                        Class: <%- hero_class%><br>
+                        Level: <%- level %><br>
+                        Strength: <%- strength%><br>
+                        Intellect: <%- intellect%><br>
+                        Agility: <%- agility%>
+                    </p>
+                </div>
+
+            </div>
+           
+
+        </div>
+
+    </body>
+
+</html>
